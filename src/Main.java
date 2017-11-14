@@ -15,7 +15,6 @@ public class Main {
 	System.out.println("Current gold score : " + bc.showGoldScore());
 	bc.reduceGoldScore(100);
     System.out.println("Current gold score  : " + bc.showGoldScore());
-    System.out.println(bc.getPlayerName());
 
 
     
