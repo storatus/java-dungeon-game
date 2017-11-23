@@ -4,6 +4,9 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.Image;
+import java.util.Random;
+
+
 
 class Main extends JPanel implements KeyListener {
 
@@ -32,30 +35,48 @@ class Main extends JPanel implements KeyListener {
 
 	public void paintComponent(Graphics g) {
 
-		ImageIcon imageObj = new ImageIcon("images/pacman.jpg");
+		ImageIcon imageObj = new ImageIcon("images/coin.jpg");
 		heroImage = imageObj.getImage();
 
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.drawImage(heroImage, dx, dy, this);
 
+		
+		
 		g2d.setStroke(new BasicStroke(2));
 		g2d.setPaint(Color.white);
 
 		// Loop Lines
 		generateDungeon(g2d);
+		
+		
+		
+//		generateCoins(6);
 
 		// between points x1,y1,x2,y2
 
 		// between points x1,y1,x2,y2
-		g2d.drawRect(120, 20, 100, 100);
+
 
 	}
 
+	public void generateCoins(int amount) {
+		
+//		  Random random = new Random();
+//	      for(int x = 0; x < amount; x++) {
+//	    	  	g2d.drawImage(heroImage, random., amount, this);
+//	      }
+		
+	}
+	
+	
 	public void generateDungeon(Graphics2D g2d) {
 
 		g2d.drawLine(60, 200, 60, 100);
 		g2d.drawLine(100, 0, 100, 100);
 		g2d.drawLine(140, 200, 140, 100);
+		g2d.drawRect(120, 120, 400, 400);
+
 
 	}
 
@@ -65,6 +86,11 @@ class Main extends JPanel implements KeyListener {
 		int maxX = (getWidth() - 20);
 		int maxY = (getHeight() - 20);
 
+		
+//		if(dx == 300 && dy == 140) {
+//			System.out.println("you toched a monster !!");
+//		}
+		
 
 		// left
 		if (key == 'a') {
