@@ -8,7 +8,7 @@ public class MainPlayerMoveRoomChange {
 
     public static void main(String[] args) {
 
-
+        
         Room entranceHall = new
                 Room("EntranceHall", 8, 10);
         //entranceHall.printRoom();
@@ -58,6 +58,10 @@ public class MainPlayerMoveRoomChange {
 * enables user to move to another room
 */
         boolean quit = false;
+        /* 
+         * new method added for a start message
+         */
+        mainMenu();
         printInstructions();
         while(!quit) {
             int nextMove = scanner.nextInt();
@@ -146,6 +150,15 @@ public class MainPlayerMoveRoomChange {
                 case 6:
                     printInstructions();
                     break;
+               /*
+                * code added for a main menu
+                */
+                case 7:
+                	printInstructions();
+                case 8:
+                	System.out.println("*** Need to add highscore function *** ");
+                case 9:
+                	System.out.println("*** Need to invoke game, do not know how to do this ***");
 
             }
 
@@ -170,7 +183,9 @@ public class MainPlayerMoveRoomChange {
             }
 
         }
-    }
+        }
+
+    
 
     private static void printInstructions() {
         System.out.println("\nChoose your next move.\nHit:");
@@ -181,6 +196,16 @@ public class MainPlayerMoveRoomChange {
                 "4  - to move player up\n" +
                 "5  - to exit through door\n" +
                 "6  - to print a list of options.");
+        System.out.println("Make your selection: ");
+    }
+    
+    private static void mainMenu() {
+        System.out.println("\nWelcome to Bob's Dungeon.\nHit:");
+        System.out.println("0  - if you are too scared to enter\n" +
+                "7 - for instructions on how to play and background on your mission\n" +
+                "8 - for high scores\n" +
+                "9  - to play\n" );
+
         System.out.println("Make your selection: ");
     }
 }
