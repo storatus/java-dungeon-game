@@ -12,8 +12,7 @@ public class MainPlayerMoveRoomChange {
         Room entranceHall = new
                 Room("EntranceHall", 8, 10);
         //entranceHall.printRoom();
-        System.out.println("Entrancehall, length : " + entranceHall.getLength() +
-             " width : " + entranceHall.getWidth());
+        System.out.println("Entrancehall, length : " + entranceHall.getLength() +" width : " + entranceHall.getWidth());
         System.out.println();
 
         /* Code to peek at boolean status at a location

@@ -1,150 +1,435 @@
 import javax.swing.*;
 
-import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
-import java.util.Random;
+import java.awt.Rectangle;
 
+class Main extends JPanel implements ActionListener, KeyListener {
 
+	Timer timer = new Timer(2, this);
 
-class Main extends JPanel implements KeyListener {
+	// Hero position
+	private int dx = 300, dy = 300, goDy = 0, goDx = 0;
 
+	// Icon (20x20)
+	private Image heroImage;
+	private Image coinImage;
+	private Image botImage;
+	private int iconSize = 40;
 
-	private int dx = 100;
-	private int dy = 100;
+	// Frame
+	private int dWidth = 800;
+	private int dHeight = 800;
+	
+	
+	//tileSize
+	private int tileSize;   
+	
+	//Counting coins
+	private int coinCount = 0; 
+	
+	 List<int[]> coinList = new ArrayList<int[]>();
+	 List<int[]> botList = new ArrayList<int[]>();
+
+	// Other
+	Font gameFont = new Font("Arial", Font.BOLD, 20);
+	
+	private boolean notifyDoor = false; 
+	private boolean isDead = false;
+
+//	private int gameLevel;  
+	
+	
+	private int[][] maze = {
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 }, 
+			{ 2, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
+			{ 2, 0, 0, 0, 0, 0, 0, 1, 1, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 3, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 3, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+	};
 
 	
-	private int heroStep = 20;
-	private Image heroImage;
-
 	public Main() {
+		timer.start();
+
+		
+		tileSize = dWidth/maze.length;   
+		generateCoins();
+		generateBots();
 
 		// Instantiate JPanel and methods
 		addKeyListener(this);
-		setPreferredSize(new Dimension(800, 800));
-		setBackground(Color.BLACK);
+		setFocusable(true);
+		setPreferredSize(new Dimension(dWidth, dHeight));
+		moveBots(100); 
+		
 
 	}
+	
 
-	// I do not know what it does but seems to be essential
-	public void addNotify() {
-		super.addNotify();
-		requestFocus();
+
+	public void generateCoins() {
+		
+		
+		while(coinList.size() < 14) {
+			int randomX = ThreadLocalRandom.current().nextInt(0, dWidth + 1);
+			int randomY = ThreadLocalRandom.current().nextInt(0, dHeight + 1);
+						
+			int tileX = (randomX-20) / tileSize;
+			int tileY = (randomY-20) / tileSize;
+			
+			
+			int pos = maze[tileY][tileX];
+			
+			if(pos == 1 || pos == 2 || pos == 3) {
+				generateCoins(); 
+			}else {
+				coinList.add(new int[] { randomX, randomY}); 	
+			}
+						
+		}
+
+	}
+	
+	public void generateBots() {
+		
+		
+		while(botList.size() < 7) {
+			int randomX = ThreadLocalRandom.current().nextInt(0, dWidth + 1);
+			int randomY = ThreadLocalRandom.current().nextInt(0, dHeight + 1);
+						
+			int tileX = (randomX-20) / tileSize;
+			int tileY = (randomY-20) / tileSize;
+			
+			int pos = maze[tileY][tileX];
+			
+			if(pos == 1 || pos == 2 || pos == 3) {
+				generateBots(); 
+			}else {
+				botList.add(new int[] { randomX, randomY}); 	
+			}
+						
+		}
+
 	}
 
 	public void paintComponent(Graphics g) {
 
-		ImageIcon imageObj = new ImageIcon("images/coin.jpg");
+		super.paintComponent(g);
+		ImageIcon imageObj = new ImageIcon("images/hero.png");
 		heroImage = imageObj.getImage();
-
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.drawImage(heroImage, dx, dy, this);
+		paintDungeon(g2d);
 
+		if(!isDead) {
+			g2d.drawImage(heroImage, dx, dy, this);
+		}
 		
 		
-		g2d.setStroke(new BasicStroke(2));
+		g2d.setStroke(new BasicStroke(10));
+		g2d.setFont(gameFont);
+
 		g2d.setPaint(Color.white);
 
-		// Loop Lines
-		generateDungeon(g2d);
+		g2d.drawString("Level: 1", 50, 20);
+		g2d.drawString("X: " + dx, 150, 20);
+		g2d.drawString("Y: " + dy, 250, 20);
+		g2d.drawString("Coins: " + coinCount, 350, 20);
+		
+
+		if(notifyDoor) {
+			g2d.setPaint(Color.black);
+			g2d.drawString("You have to collect at least 5 coins", 200, 200);
+		}
+		
+		if(isDead) {
+			g2d.setPaint(Color.black);
+			g2d.drawString("YOU DIED!", 200, 200);
+		}
 		
 		
-		
-//		generateCoins(6);
+		if(coinCount > 5) {
+			for (int row = 0; row < maze.length; row++) {
+				for (int col = 0; col < maze[0].length; col++) {
+					
+					if(maze[row][col] == 3) {
+						maze[row][col] = 0; 
+					}
+							
+			}
+		}
 
-		// between points x1,y1,x2,y2
-
-		// between points x1,y1,x2,y2
-
-
+		}
 	}
 
-	public void generateCoins(int amount) {
-		
-//		  Random random = new Random();
-//	      for(int x = 0; x < amount; x++) {
-//	    	  	g2d.drawImage(heroImage, random., amount, this);
-//	      }
-		
+	
+	public void getCoin() {
+		for (int i = 0; i < coinList.size(); i++) {
+			int posX = coinList.get(i)[0]; 
+			int posY = coinList.get(i)[1];
+			
+			
+			if ((dx > posX-20 && dx < posX+20) && dy > posY-20 && dy < posY+20) {
+				coinList.remove(i);
+				coinCount++; 
+			}
+			
+		 }
 	}
 	
+	public void getBot() {
+		for (int i = 0; i < botList.size(); i++) {
+			int posX = botList.get(i)[0]; 
+			int posY = botList.get(i)[1];
+			
+			
+			if ((dx > posX-20 && dx < posX+20) && dy > posY-20 && dy < posY+20) {
+				
+				isDead = true;  
+			}
+			
+		 }
+	}
+
 	
-	public void generateDungeon(Graphics2D g2d) {
+	public void dungeonBounce() {
+		if (goDx == -1) {
+			int tileX = (dx) / tileSize;
+			int tileY = (dy + 40) / tileSize;
+			int pos = maze[tileY][tileX];
 
-		g2d.drawLine(60, 200, 60, 100);
-		g2d.drawLine(100, 0, 100, 100);
-		g2d.drawLine(140, 200, 140, 100);
-		g2d.drawRect(120, 120, 400, 400);
+			if (pos == 1 || pos == 2 || pos == 3) {
+				goDx = 0;
+				dx = dx + 5;
+				
+			
+			}
+		}
+
+		if (goDx == 1) {
+			int tileX = (dx + 40) / tileSize;
+			int tileY = (dy + 40) / tileSize;
+			int pos = maze[tileY][tileX];
+
+			if (pos == 1 || pos == 2 || pos == 3) {
+				goDx = 0;
+				dx = dx - 5;
+				if(pos == 3) {
+					notifyDoor = true; 
+				}
+			}
+			
+		}
+
+		if (goDy == 1) {
+			int tileX = (dx + 40) / tileSize;
+			int tileY = (dy + 40) / tileSize;
+			int pos = maze[tileY][tileX];
+
+			if (pos == 1 || pos == 2 || pos == 3) {
+				goDy = 0;
+				dy = dy - 10;
+				
+			}
+			
+		}
+
+		if (goDy == -1) {
+			int tileX = (dx + 40) / tileSize;
+			int tileY = (dy) / tileSize;
+			int pos = maze[tileY][tileX];
+
+			if (pos == 1 || pos == 2 || pos == 3) {
+				goDy = 0;
+				dy = dy + 10;
+			}
+		
+		}
+	} 
+	
+	
+	public void moveBots(int time) {
+	
+		
+	    Timer timer = new Timer(time, new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	    
+	        	for (int i = 0; i < botList.size(); i++) {
+	            	int randomX = ThreadLocalRandom.current().nextInt(-20, 20 + 1);
+	    			int posX = botList.get(i)[0]; 
+	    			botList.get(i)[0] = posX +randomX;
+	    		 }
+	        	
+	         for (int i = 0; i < botList.size(); i++) {
+		    		int randomY = ThreadLocalRandom.current().nextInt(-20, 20 + 1);
+	    			int posY = botList.get(i)[1];
+	    			botList.get(i)[1] = posY +randomY;
+	    		 }
+	        	
+	        	
+	        }
+	    });
+	    timer.start();
+	}
+	
+
+	
+	
+	public void actionPerformed(ActionEvent e) {
+		
+		
+		
+		jframeBounce();
+		getCoin();
+		getBot();
+		dungeonBounce();
+
+
+		
+
+		dx = dx + goDx;
+		dy = dy + goDy;
+		repaint();
+
+	}
+
+	public void paintDungeon(Graphics2D g) {
+
+		// draw the maze
+
+		for (int row = 0; row < maze.length; row++) {
+			for (int col = 0; col < maze[0].length; col++) {
+				Color color;
+				switch (maze[row][col]) {
+				case 1:
+					color = Color.BLACK;
+					break;
+				case 2: case 3:
+					color = new Color(139,69,19);
+					break;
+				default:
+					color = Color.WHITE;
+				}
+				g.setColor(color);
+				g.fillRect(tileSize * col, tileSize * row, tileSize, tileSize);
+				g.setColor(Color.BLACK);
+				
+				if(maze[row][col] != 2) {
+					g.drawRect(tileSize * col, tileSize * row, tileSize, tileSize);
+				}
+				
+			}
+		}
+		
+		
+		
+		for (int i = 0; i < coinList.size(); i++) {
+			int posX = coinList.get(i)[0]; 
+			int posY = coinList.get(i)[1];
+			ImageIcon coinObj = new ImageIcon("images/gold.png");
+			coinImage = coinObj.getImage();
+			g.drawImage(coinImage, posX, posY, this);
+
+		 }
+		
+		
+		for (int i = 0; i < botList.size(); i++) {
+			int posX = botList.get(i)[0]; 
+			int posY = botList.get(i)[1];
+			ImageIcon botObj = new ImageIcon("images/bot.png");
+			botImage = botObj.getImage();
+			g.drawImage(botImage, posX, posY, this);
+
+		 }
 
 
 	}
 
-	public void doMovement(char key) {
+	public void doMovement(int key) {
 
-		// Stop the move on out boundaries - set 20 for the icon size
-		int maxX = (getWidth() - 20);
-		int maxY = (getHeight() - 20);
-
-		
-//		if(dx == 300 && dy == 140) {
-//			System.out.println("you toched a monster !!");
-//		}
-		
-
-		// left
-		if (key == 'a') {
-			if (dx == 0) {
-				return;
-			}
-			dx = dx - heroStep;
+		if (key == KeyEvent.VK_DOWN) {
+			goDy = 1;
+			goDx = 0;
 		}
 
-		// right
-		if (key == 'd') {
-			if (dx >= maxX) {
-				return;
-			}
-			dx = dx + heroStep;
+		if (key == KeyEvent.VK_UP) {
+			goDy = -1;
+			goDx = 0;
 		}
-
-		// up
-		if (key == 'w') {
-			 if (dy == 0) {
-			 return;
-			 }
-			dy = dy - heroStep;
+		if (key == KeyEvent.VK_LEFT) {
+			goDy = 0;
+			goDx = -1;
 		}
-
-		// down
-		if (key == 's') {
-			if (dy >= maxY) {
-				return;
-			}
-			dy = dy + 20;
+		if (key == KeyEvent.VK_RIGHT) {
+			goDy = 0;
+			goDx = 1;
 		}
-
-		System.out.println("dx: " + dx);
-		System.out.println("dy: " + dy);
 
 	}
 
-	// Nothing
+	public void jframeBounce() {
+
+		int bounceWidth = dWidth - iconSize;
+		int bounceHeight = dHeight - iconSize;
+
+		if (dx > bounceWidth) {
+			goDx = 0;
+			dx = bounceWidth;
+		}
+
+		if (dy > bounceHeight) {
+			goDy = 0;
+			dy = bounceHeight;
+		}
+
+		// blocking bounced for JFrame - left
+		if (dx < 0) {
+			goDx = 0;
+			dx = 0;
+		}
+		if (dy < 0) {
+			goDy = 0;
+			dy = 0;
+		}
+	}
+
 	public void keyTyped(KeyEvent e) {
 	}
 
-	// Nothing
 	public void keyReleased(KeyEvent e) {
+		goDx = 0;
+		goDy = 0;
 	}
 
 	public void keyPressed(KeyEvent e) {
-
-		char key = e.getKeyChar();
-
-		System.out.println(key);
-
+		
+		 
+		
+		int key = e.getKeyCode();
+		if(key == 10) {
+			notifyDoor = false; 
+		}
+		
+		
 		doMovement(key);
-		repaint();
 
 	}
 
@@ -152,6 +437,7 @@ class Main extends JPanel implements KeyListener {
 
 		// Why Am I having twice setBackgroundblack ? It is when I start
 		JFrame frame = new JFrame();
+
 		frame.getContentPane().add(new Main());
 		frame.setBackground(Color.black);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

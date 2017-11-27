@@ -1,5 +1,6 @@
 public class Room {
-    private String roomName;
+    
+	private String roomName;
     private int length;
     private int width;
     private int door_x_Coordinate;
@@ -13,6 +14,7 @@ public class Room {
         this.length = length;
         this.width = width;
         this.roomArrayGrid = new boolean[length][width];
+        
         // initialise each grid cell to zero
         for(int i=0; i<length; ++i) {
             for(int j=0; j<width; ++j) {
