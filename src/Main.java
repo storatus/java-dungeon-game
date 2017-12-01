@@ -45,12 +45,12 @@ class Main extends JPanel implements ActionListener, KeyListener {
 	 List<int[]> botList = new ArrayList<int[]>();
 
 	// Other
-	Font gameFont = new Font("Arial", Font.BOLD, 20);
+	Font gameFont = new Font("Arial", Font.BOLD,20);
 	
 	private boolean notifyDoor = false; 
 	private boolean isDead = false;
 
-//	private int gameLevel;  
+	//	private int gameLevel;  
 	
 	
 	private int[][] maze = {
@@ -63,8 +63,11 @@ class Main extends JPanel implements ActionListener, KeyListener {
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 3, 1 }, 
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 3, 1 }, 
 			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },			
 	};
+
+
+	
 
 	
 	public Main() {
@@ -72,9 +75,8 @@ class Main extends JPanel implements ActionListener, KeyListener {
 
 		
 		tileSize = dWidth/maze.length;   
-		generateCoins();
-		generateBots();
-
+		generateItems(coinList, 10);
+		generateItems(botList, 8);
 		// Instantiate JPanel and methods
 		addKeyListener(this);
 		setFocusable(true);
@@ -85,11 +87,10 @@ class Main extends JPanel implements ActionListener, KeyListener {
 	}
 	
 
-
-	public void generateCoins() {
+	
+	public void generateItems(List<int[]> itemList, int count) {
 		
-		
-		while(coinList.size() < 14) {
+		while(itemList.size() < count) {
 			int randomX = ThreadLocalRandom.current().nextInt(0, dWidth + 1);
 			int randomY = ThreadLocalRandom.current().nextInt(0, dHeight + 1);
 						
@@ -100,36 +101,20 @@ class Main extends JPanel implements ActionListener, KeyListener {
 			int pos = maze[tileY][tileX];
 			
 			if(pos == 1 || pos == 2 || pos == 3) {
-				generateCoins(); 
+				generateItems(itemList, count); 
 			}else {
-				coinList.add(new int[] { randomX, randomY}); 	
+				itemList.add(new int[] { randomX, randomY}); 	
 			}
 						
 		}
-
+		
 	}
 	
-	public void generateBots() {
-		
-		
-		while(botList.size() < 7) {
-			int randomX = ThreadLocalRandom.current().nextInt(0, dWidth + 1);
-			int randomY = ThreadLocalRandom.current().nextInt(0, dHeight + 1);
-						
-			int tileX = (randomX-20) / tileSize;
-			int tileY = (randomY-20) / tileSize;
-			
-			int pos = maze[tileY][tileX];
-			
-			if(pos == 1 || pos == 2 || pos == 3) {
-				generateBots(); 
-			}else {
-				botList.add(new int[] { randomX, randomY}); 	
-			}
-						
-		}
+	
 
-	}
+	
+	
+
 
 	public void paintComponent(Graphics g) {
 
@@ -172,8 +157,8 @@ class Main extends JPanel implements ActionListener, KeyListener {
 					
 					if(maze[row][col] == 3) {
 						maze[row][col] = 0; 
-					}
-							
+					}	
+					
 			}
 		}
 
@@ -219,8 +204,6 @@ class Main extends JPanel implements ActionListener, KeyListener {
 			if (pos == 1 || pos == 2 || pos == 3) {
 				goDx = 0;
 				dx = dx + 5;
-				
-			
 			}
 		}
 
@@ -345,11 +328,24 @@ class Main extends JPanel implements ActionListener, KeyListener {
 			int posX = coinList.get(i)[0]; 
 			int posY = coinList.get(i)[1];
 			ImageIcon coinObj = new ImageIcon("images/gold.png");
+			
+			
+			
+			
+//			Do Images
+//			System.out.println(getClass()); 			
+//			ImageIcon coinObj = new ImageIcon(getClass().getResource("/images/gold.png"));
+			
+			
+			
+			
+			
 			coinImage = coinObj.getImage();
 			g.drawImage(coinImage, posX, posY, this);
 
 		 }
-		
+
+
 		
 		for (int i = 0; i < botList.size(); i++) {
 			int posX = botList.get(i)[0]; 
@@ -420,8 +416,6 @@ class Main extends JPanel implements ActionListener, KeyListener {
 	}
 
 	public void keyPressed(KeyEvent e) {
-		
-		 
 		
 		int key = e.getKeyCode();
 		if(key == 10) {
