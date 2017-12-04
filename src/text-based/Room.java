@@ -1,12 +1,32 @@
+
+/**
+ * Class. Room in Dungeon for
+ * Multi-Player Adventure Game SWEngCW02
+ *
+ * @version 2.0
+ * @created 14/11/2017
+ * @release 17/11/2017 Addressing Function Requirement
+ * FR2a, FR2b, User Story US001
+ * @See PlayerScore.java, Player.java, PlayerTest.java
+ */
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class Room {
-    
-	private String roomName;
+    private String roomName;
     private int length;
     private int width;
     private int door_x_Coordinate;
     private int door_y_Coordinate;
     private int trapdoor_x_Coordinate;
     private int trapdoor_y_Coordinate;
+    private boolean[][] roomArrayGrid;
+    Coordinates doorCoordinates;
+    Bot bot;
+    Player player;
+
+    private Map<Room, Coordinates> doors;
 
     public Room(String roomName, int length, int width) {
 
@@ -14,13 +34,22 @@ public class Room {
         this.length = length;
         this.width = width;
         this.roomArrayGrid = new boolean[length][width];
-        
         // initialise each grid cell to zero
         for(int i=0; i<length; ++i) {
             for(int j=0; j<width; ++j) {
                 this.roomArrayGrid[i][j] = false;
             }
         }
+
+        this.doors = new HashMap<Room, Coordinates>();
+    }
+
+    public void addDoor(Room nextRoom, Coordinates coordinates) {
+        this.doors.put(nextRoom, coordinates);
+    }
+
+    public Map<Room, Coordinates> getDoors() {
+        return doors;
     }
 
     public String getRoomName() {
@@ -79,7 +108,7 @@ public class Room {
         this.trapdoor_y_Coordinate = trapdoor_y_Coordinate;
     }
 
-    private boolean[][] roomArrayGrid;
+
 
 
 
@@ -101,6 +130,27 @@ public class Room {
             for(int j=0; j<width; ++j) {
                 if(roomArrayGrid[i][j] == true){
                     System.out.print('X' + " ");
+                }
+                else {
+                    System.out.print('_' + " ");
+                }
+            }
+            System.out.println();
+
+        }
+    }
+
+    public void printRoomWithBot() {
+        for(int i=0; i<length; ++i) {
+            for(int j=0; j<width; ++j) {
+                if(( i == bot.getX_Coordinate_Bot() ) && (j == bot.getY_Coordinate_Bot())) {
+                    roomArrayGrid[i][j] = true;
+                    System.out.print('$' + " ");
+                }
+                if (i == player.getX_Coordinate_Player() &&
+                        j == player.getY_Coordinate_Player() ) {
+                    //roomArrayGrid[i][j] = true;
+                    System.out.println('X' + " ");
                 }
                 else {
                     System.out.print('_' + " ");

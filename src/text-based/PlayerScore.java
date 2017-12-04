@@ -1,4 +1,24 @@
-//package com.SWEngCW2;
+/**
+ * Class. Gold Scoring System for
+ * Multi-Player Adventure Game SWEngCW02
+ *
+ * @version 1.0
+ * @release 12/11/2017 Addressing Function Requirement FR2b, FR2hii,
+ *    User Story US004
+ * @See PlayerScoreTest.java
+ */
+
+package com.SWEngCW2;
+
+/**
+ * Class. Gold scoring system for
+ * Multi-Player Adventure Game SWEngCW02
+ *
+ * @version 1.0
+ * @release 12/11/2017 Addressing Function Requirement FR2b, FR2hii, User Story
+ *          US004
+ * @See PlayerScoreTest.java
+ */
 
 public class PlayerScore {
 
@@ -18,11 +38,13 @@ public class PlayerScore {
         return goldScore;
     }
 
+    // increments score when player finds gold
     public int addToGoldScore(int addGoldAmount) {
         goldScore += addGoldAmount;
         return goldScore;
     }
 
+    // decrements score when player finds gold
     public int reduceGoldScore (int reduceGoldAmount) {
         goldScore -= reduceGoldAmount;
         return goldScore;

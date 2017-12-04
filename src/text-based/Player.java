@@ -1,7 +1,23 @@
+
+
+/**
+ * Class. Human Player for
+ * Multi-Player Adventure Game SWEngCW02
+ *
+ * @version 1.0
+ * @created 15/11/2017
+ * @release 19/11/2017 Addressing  Functional
+ *      Requirement FR1a, FR2f, User Story US005,
+ *      US006, US007
+ * @See PlayerScore.java, Player.java, PlayerTest.java,
+ * MainPlayerMoveRoomChange.java
+ */
+
 public class Player {
     private int x_Coordinate_Player;
     private int y_Coordinate_Player;
     private int goldScore;
+    Coordinates playerCoordinates;
     Room currentRoom;
 
     public Player(Room currentRoom,
