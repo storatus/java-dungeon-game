@@ -1,8 +1,3 @@
-
-
-
-
-
 public class Coordinates {
     private int x_Coordinate;
     private int y_Coordinate;
