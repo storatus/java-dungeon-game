@@ -18,7 +18,7 @@ public class Model extends PlayerModel{
 	private int tileSize;   
 	
 	//Counting coins
-	private int coinCount = 0; 
+	private int coinCount; 
 	
 	 List<int[]> coinList = new ArrayList<int[]>();
 	 List<int[]> botList = new ArrayList<int[]>();
@@ -31,9 +31,13 @@ public class Model extends PlayerModel{
 	private boolean isPositioned = false;
 	
 	
+	private int currentLevel = 1;  
+	
+	
 	private int menuState = 1; 
 	private int[] menuStates = {400,500,600};
-	
+	private int[] menuDeadStates = {270,330};
+
 		
 	
 	//	private int gameLevel;  
@@ -42,31 +46,30 @@ public class Model extends PlayerModel{
 			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 
 			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 }, 
 			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
-			{ 2, 0, 0, 0, 0, 0, 0, 1, 1, 1 }, 
-			{ 2, 0, 0, 0, 0, 0, 0, 1, 1, 1 }, 
+			{ 3, 0, 0, 0, 0, 0, 0, 1, 1, 1 }, 
+			{ 3, 0, 0, 0, 0, 0, 0, 1, 1, 1 }, 
 			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 3, 1 }, 
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 3, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 2, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 2, 1 }, 
 			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },			
+	};
+	
+	private int[][] dungeon2 = {
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 1, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 1, 1 },
+			{ 1, 0, 0, 1, 1, 0, 0, 0, 1, 1 }, 
+			{ 1, 0, 0, 1, 1, 0, 0, 0, 1, 1 }, 
+			{ 1, 0, 0, 1, 1, 0, 0, 0, 1, 1 },
+			{ 1, 0, 0, 1, 1, 0, 0, 0, 2, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 2, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 1, 1 },
 			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },			
 	};
 	
 	
 	
-	public Model(){
-		
-		super(); 
-		//Set tile size
-		this.tileSize = dWidth/dungeon.length;  
-		generateCollisions(); 
-       
-		// Set Items
-		generateItems(coinList, 10, "coins");
-		generateItems(botList, 5, "bots");
-		positionPlayer(); 
-		
-	}
-
 	
 	public int getIconSize() {
 		return iconSize; 
@@ -94,8 +97,13 @@ public class Model extends PlayerModel{
 		this.coinCount = number; 
 	}
 	
-	public int[][] getDungeon() {
+	public int[][] getDungeon(int number) {
+		if(number == 2) {
+			return dungeon2;
+		}
+		
 		return dungeon; 
+		 
 	}
 	
 	public int getTileSize() {
@@ -114,10 +122,20 @@ public class Model extends PlayerModel{
 		return gameState; 
 	}
 	
+	
+	public int getCurrentLevel() {
+		return currentLevel; 
+	}
+	
+	public void setCurrentLevel(int level) {
+		currentLevel = level; 
+	}
+	
 	public void setGameState(boolean bool) {
 		gameState = bool;  
 	}
 	
+		
 	public int getMenuState() {
 		return menuState;   
 	}
@@ -126,9 +144,13 @@ public class Model extends PlayerModel{
 		return menuStates;
 	}
 	
+	public int[] getMenuDeadStates() {
+		return menuDeadStates;
+	}
 	
-	public void minusMenuState() {
-		if(menuState < 3) {
+	
+	public void minusMenuState(int decreaseLimit) {
+		if(menuState < decreaseLimit) {
 			menuState++;
 		}
 	}
@@ -138,6 +160,9 @@ public class Model extends PlayerModel{
 			menuState--;
 		}
 	}
+	
+
+	
 	
 	public void generateItems(List<int[]> itemList, int count, String name) {
 		
@@ -178,6 +203,19 @@ public class Model extends PlayerModel{
 		
 	}
 	
+	
+	public void cleanItems(){
+		
+		if(botList.size() > 0) {
+			botList.clear(); 
+		}
+		
+		if(coinList.size() > 0) {
+			coinList.clear(); 
+		}
+		
+	}
+	
 	public void positionPlayer() {
 		
 		while(!isPositioned) {
@@ -209,8 +247,6 @@ public class Model extends PlayerModel{
 	}
 	
 	
-
-	
 	public Image getImage(String name) {
 		ImageIcon imageObj = new ImageIcon("images/"+name+".png");
 		Image image = imageObj.getImage();
@@ -231,6 +267,9 @@ public class Model extends PlayerModel{
 	}
 	
 	public void generateCollisions() {
+		
+		
+		
 		int tile = getTileSize();
 
 		for (int row = 0; row < dungeon.length; row++) {
@@ -245,6 +284,27 @@ public class Model extends PlayerModel{
 	
 	public ArrayList<Rectangle> getTiles() {
 		return tiles; 
+	}
+	
+	public void initItems() {
+		// Set Items
+		setCurrentLevel(1); 
+		setCoin(0);
+		generateCollisions();
+		cleanItems(); 
+		generateItems(coinList, 10, "coins");
+		generateItems(botList, 1, "bots");
+		positionPlayer(); 
+	}
+	
+	public Model(){
+		
+		super(); 
+		//Set tile size
+		this.tileSize = dWidth/dungeon.length;  
+		initItems(); 
+
+		
 	}
 	
 }

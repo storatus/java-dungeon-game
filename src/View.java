@@ -33,13 +33,43 @@ public class View extends JPanel {
 			 if(!model.getDeadState()) {
 				 g2d.drawImage(model.getImage("hero"), model.getHeroX(), model.getHeroY(), this);
 			 }else {
-//				 showDeadScreen(g2d); 
+				 showDeadScreen(g2d);
 			 }
 		
 		}else {
 			drawMenu(g2d); 
 		}
 		 
+	}
+	
+	
+	public void showDeadScreen(Graphics2D g2d){
+		
+
+		
+		// Draw Canvas
+		g2d.setColor(Color.white);
+		g2d.fillRect(100, 200, 600, 200);
+		g2d.setColor(Color.black);
+		g2d.drawRect(100, 200, 600, 200);
+		
+		// Draw String
+		g2d.setFont(new Font("SansSerif", Font.BOLD,30));
+		g2d.setColor(Color.black);
+		g2d.drawString("You are dead", 300, 250);
+
+		
+		// Draw Buttons
+		
+		
+		int menuState = model.getMenuState(); 
+		int tokenState =  model.getMenuDeadStates()[menuState-1]; 
+		g2d.drawImage(model.getImage("hero"), 250, tokenState, this);		
+	
+		g2d.drawImage(model.getImage("menu-continue"), 300, 270, this);
+		g2d.drawImage(model.getImage("menu-exit"), 300, 330, this);
+
+		
 	}
 
 	public void drawBots(Graphics2D g2d){
@@ -72,13 +102,20 @@ public class View extends JPanel {
 	
 	public void drawDungeon(Graphics2D g2d) {
 
-		int[][] dungeon = model.getDungeon();
+		
 		int tile = model.getTileSize();
-
-		for (int row = 0; row < dungeon.length; row++) {
-			for (int col = 0; col < dungeon[0].length; col++) {
+		int[][] gameDungeon = model.getDungeon(1);
+		
+		if(model.getCurrentLevel() == 2) {
+			gameDungeon = model.getDungeon(2); 
+		}
+		
+		
+		
+		for (int row = 0; row < gameDungeon.length; row++) {
+			for (int col = 0; col < gameDungeon[0].length; col++) {
 				Color color;
-				switch (dungeon[row][col]) {
+				switch (gameDungeon[row][col]) {
 				case 1:
 					color = Color.BLACK;
 					break;
@@ -93,7 +130,7 @@ public class View extends JPanel {
 				g2d.fillRect(tile * col, tile * row, tile, tile);	
 				g2d.setColor(Color.BLACK);
 
-				if (dungeon[row][col] != 2) {
+				if (gameDungeon[row][col] != 1) {
 					g2d.drawRect(tile * col, tile * row, tile, tile);
 				}
 

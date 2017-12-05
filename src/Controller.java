@@ -55,8 +55,15 @@ public class Controller implements ActionListener, KeyListener {
 
 	public void doMenuMovement(int key) {
 
+		//Determine if dead or in main Menu
+		int decreaseLimit = 3; 
+		if(model.getDeadState()) {
+			decreaseLimit = 2;
+		}
+		
+		
 		if (key == KeyEvent.VK_DOWN) {
-			model.minusMenuState();
+			model.minusMenuState(decreaseLimit);
 		}
 
 		if (key == KeyEvent.VK_UP) {
@@ -69,14 +76,70 @@ public class Controller implements ActionListener, KeyListener {
 	}
 
 	public void selectMenu(int state) {
+		
+		if(!model.getDeadState()) {
+			if (state == 1) {
+				model.setGameState(true);
+			}
 
-		if (state == 1) {
-			model.setGameState(true);
-		}
+			if (state == 3) {
+				System.exit(0);
+			}
+		}else {
+			if (state == 1) {
+				renewGame();
+			}
 
-		if (state == 3) {
-			System.exit(0);
+			if (state == 2) {
+				System.exit(0);
+			}
+			
 		}
+		
+	}
+	
+	public void renewGame() {
+		
+		model.initItems();
+		model.setDeadState(false);	
+
+	}
+	
+	
+	public void hitDoor() {
+		
+		for (Rectangle rectangle : model.getTiles()) {
+
+			if (model.getPlayer().intersects(rectangle)) {
+				int tile = model.getTileSize();
+				int xCoor = rectangle.x; 
+				int yCoor = rectangle.y; 
+				
+				int col = yCoor /tile;
+				int row = xCoor /tile; 
+				
+				int state = model.getDungeon(1)[col][row]; 
+	
+				if(model.getCurrentLevel() == 1) {
+					if(state == 3) {
+						model.setCurrentLevel(2);
+					}
+				}
+				
+			
+				
+				
+				
+				
+			}
+
+		}
+		
+		
+		
+	
+		
+		
 	}
 
 	public void dungeonBounce() {
@@ -237,9 +300,9 @@ public class Controller implements ActionListener, KeyListener {
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
 
-		if (model.getGameState()) {
+		if(model.getGameState() && !model.getDeadState()){
 			doMovement(key);
-		} else {
+		}else {
 			doMenuMovement(key);
 		}
 
@@ -262,13 +325,14 @@ public class Controller implements ActionListener, KeyListener {
 			frameBounce();
 			hitCoin();
 			hitBot();
+			hitDoor();
+			
 			dungeonBounce();
 
 			model.setHeroX(model.getHeroX() + model.getGoX());
 			model.setHeroY(model.getHeroY() + model.getGoY());
-		} else {
-
 		}
+		
 		view.repaint();
 
 	}

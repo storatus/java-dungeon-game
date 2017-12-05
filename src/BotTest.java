@@ -22,39 +22,37 @@ import static org.junit.Assert.*;
 
 public class BotTest {
 
-    // jUnit test. Test randomised X_Coordinate of 'bot remains
-    // within length of room
-    @org.junit.Test
-    public void randomiseX_Coordinate() throws Exception {
-        // establish a failing test initially
-        /*
-        fail("This test is yet to be implemented.");
-        */
+	// jUnit test. Test randomised X_Coordinate of 'bot remains
+	// within length of room
+	@org.junit.Test
+	public void randomiseX_Coordinate() throws Exception {
+		// establish a failing test initially
+		/*
+		 * fail("This test is yet to be implemented.");
+		 */
 
-        // write code to pass JUnit test
-        Room entrancehall =
-                new Room("Entrancehall", 8, 10);
-        Bot robot = new Bot(entrancehall, 3, 3);
-        int robotXCoordinate = robot.randomiseX_Coordinate();
-        assertTrue(robotXCoordinate < entrancehall.getLength());
+		// write code to pass JUnit test
+		Room entrancehall = new Room("Entrancehall", 8, 10);
+		Bot robot = new Bot(entrancehall, 3, 3);
+		int robotXCoordinate = robot.randomiseX_Coordinate();
+		assertTrue(robotXCoordinate < entrancehall.getLength());
 
-    }
+	}
 
-    // jUnit test. Test randomised Y_Coordinate of 'bot remains
-    // within length of room
-    @org.junit.Test
-    public void randomiseY_Coordinate() throws Exception {
-        // establish a failing test initially
-        /*
-        fail("This test is yet to be implemented.");
-        */
+	// jUnit test. Test randomised Y_Coordinate of 'bot remains
+	// within length of room
+	@org.junit.Test
+	public void randomiseY_Coordinate() throws Exception {
+		// establish a failing test initially
+		/*
+		 * fail("This test is yet to be implemented.");
+		 */
 
-        Room entrancehall =
-                new Room("Entrancehall", 8, 10);
-        Bot robot = new Bot(entrancehall, 3, 3);
-        int robotYCoordinate = robot.randomiseY_Coordinate();
-        assertTrue(robotYCoordinate < entrancehall.getWidth());
+		Room entrancehall = new Room("Entrancehall", 8, 10);
+		Bot robot = new Bot(entrancehall, 3, 3);
+		int robotYCoordinate = robot.randomiseY_Coordinate();
+		assertTrue(robotYCoordinate < entrancehall.getWidth());
 
-    }
+	}
 
 }
