@@ -25,10 +25,17 @@ public class Model extends PlayerModel{
 	 private ArrayList<Rectangle> tiles = new ArrayList<Rectangle>();
 
 	// Other
-	Font gameFont = new Font("Arial", Font.BOLD,20);	
+	Font gameFont = new Font("Arial", Font.BOLD,30);	
 	private boolean deadState = false;
 	private boolean gameState = false;
 	private boolean isPositioned = false;
+	private boolean moveState = false;
+	
+	private boolean doorState = false;
+	
+	private int botNumber = 2; 
+	private int coinNumber = 12; 
+
 	
 	
 	private int currentLevel = 1;  
@@ -38,19 +45,22 @@ public class Model extends PlayerModel{
 	private int[] menuStates = {400,500,600};
 	private int[] menuDeadStates = {270,330};
 
-		
 	
-	//	private int gameLevel;  
+	// 1 - Wall
+	// 2 - Closed Door
+	// 3 - Opened Door
+	// 4 - Startway
+		
 	
 	private int[][] dungeon = {
 			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 
 			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 }, 
 			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
-			{ 3, 0, 0, 0, 0, 0, 0, 1, 1, 1 }, 
-			{ 3, 0, 0, 0, 0, 0, 0, 1, 1, 1 }, 
+			{ 2, 0, 0, 0, 0, 0, 0, 1, 1, 1 }, 
+			{ 2, 0, 0, 0, 0, 0, 0, 1, 1, 1 }, 
 			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 2, 1 }, 
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 2, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 }, 
 			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
 			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },			
 	};
@@ -68,13 +78,37 @@ public class Model extends PlayerModel{
 			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },			
 	};
 	
+	private int[][] dungeon3 = {
+			{ 1, 1, 1, 2, 2, 2, 2, 1, 1, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+			{ 1, 0, 0, 1, 1, 0, 1, 1, 0, 1 }, 
+			{ 1, 0, 0, 1, 1, 0, 1, 1, 0, 1 }, 
+			{ 1, 0, 0, 1, 1, 0, 1, 1, 0, 1 },
+			{ 1, 0, 0, 1, 1, 0, 1, 1, 0, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },			
+	};
 	
+	
+	private int[][] dungeon4 = {
+			{ 1, 1, 1, 2, 2, 2, 2, 1, 1, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 }, 
+			{ 1, 0, 0, 1, 1, 1, 1, 1, 0, 1 },
+			{ 1, 0, 0, 1, 1, 1, 1, 1, 0, 1 }, 
+			{ 1, 0, 0, 1, 1, 0, 1, 1, 0, 1 }, 
+			{ 1, 0, 0, 1, 1, 0, 1, 1, 0, 1 },
+			{ 1, 0, 0, 1, 1, 0, 1, 1, 0, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },			
+	};
 	
 	
 	public int getIconSize() {
 		return iconSize; 
 	}
-
 	
 	public Font getGameFont() {
 		return gameFont; 
@@ -88,8 +122,20 @@ public class Model extends PlayerModel{
 	}
 	
 	
+	public void setPosition(boolean state) {
+		this.isPositioned = state; 
+	}
+	
 	public int getCoins(){
 		return coinCount; 
+	}
+	
+	public void setCoinNumber(int number) {
+		coinNumber = number; 
+	}
+	
+	public void setBotNumber(int number) {
+		botNumber = number; 
 	}
 	
 	
@@ -97,12 +143,25 @@ public class Model extends PlayerModel{
 		this.coinCount = number; 
 	}
 	
-	public int[][] getDungeon(int number) {
-		if(number == 2) {
+	public int[][] getDungeon() {
+				
+		if(currentLevel == 2) {
 			return dungeon2;
 		}
 		
-		return dungeon; 
+		if(currentLevel == 3) {
+			return dungeon3; 
+		}
+		
+		
+		if(currentLevel == 4) {
+			return dungeon4; 
+		}
+		
+//		System.out.println(currentLevel); 
+		
+		//Default
+		return dungeon; 	
 		 
 	}
 	
@@ -135,7 +194,32 @@ public class Model extends PlayerModel{
 		gameState = bool;  
 	}
 	
-		
+
+	public boolean getDoorState() {
+		return doorState; 
+	}
+	
+	public void setDoorState(boolean state) {
+		doorState = state; 
+	}
+	
+	
+	public boolean getDoorNotification() {
+		return doorState; 
+	}
+	
+	public void setDoorNotification(boolean state) {
+		doorState = state; 
+	}
+	
+	public boolean getMoveState() {
+		return moveState; 
+	}
+	
+	public void setMoveState(boolean state) {
+		moveState = state; 
+	}
+	
 	public int getMenuState() {
 		return menuState;   
 	}
@@ -161,7 +245,7 @@ public class Model extends PlayerModel{
 		}
 	}
 	
-
+	
 	
 	
 	public void generateItems(List<int[]> itemList, int count, String name) {
@@ -216,7 +300,13 @@ public class Model extends PlayerModel{
 		
 	}
 	
+	public void doDead() {
+		setMoveState(false); 
+		setDeadState(true);
+	}
+	
 	public void positionPlayer() {
+		
 		
 		while(!isPositioned) {
 			
@@ -237,11 +327,16 @@ public class Model extends PlayerModel{
 			if(intersects){
 				positionPlayer();
 			}else {
+
 				setHeroY(randomY);
-				setHeroY(randomX);
+				setHeroX(randomX);
 				isPositioned = true; 
 			}
 						
+			
+	
+			
+
 		}
 		
 	}
@@ -266,16 +361,34 @@ public class Model extends PlayerModel{
 		tiles.add(rectangle); 
 	}
 	
+	//reverse doors
+	public void setBackdoors(){
+		dungeon = getDungeon(); 
+		
+		for (int row = 0; row < dungeon.length; row++) {
+			for (int col = 0; col < dungeon[0].length; col++) {
+								
+				if(dungeon[row][col] == 3 ) {
+					dungeon[row][col] = 2; 
+				}
+			}
+		}
+	}
+	
 	public void generateCollisions() {
 		
-		
+		//Clean tiles for new level
+		tiles.clear();
 		
 		int tile = getTileSize();
+		dungeon = getDungeon(); 
 
 		for (int row = 0; row < dungeon.length; row++) {
 			for (int col = 0; col < dungeon[0].length; col++) {
 								
-				if(dungeon[row][col] >= 1 ) {
+				int tileNumber = dungeon[row][col]; 
+				
+				if(tileNumber == 1 || tileNumber == 2 || tileNumber == 3) {
 					tiles.add(new Rectangle(tile * col, tile * row, tile, tile));
 				}
 			}
@@ -287,21 +400,21 @@ public class Model extends PlayerModel{
 	}
 	
 	public void initItems() {
-		// Set Items
-		setCurrentLevel(1); 
-		setCoin(0);
 		generateCollisions();
+		setCoin(0);
 		cleanItems(); 
-		generateItems(coinList, 10, "coins");
-		generateItems(botList, 1, "bots");
-		positionPlayer(); 
+		generateItems(coinList, coinNumber, "coins");
+		generateItems(botList, botNumber, "bots");
+		setBackdoors();
+		setPosition(false); 
+		positionPlayer();
 	}
 	
 	public Model(){
 		
 		super(); 
 		//Set tile size
-		this.tileSize = dWidth/dungeon.length;  
+		this.tileSize = dWidth/dungeon.length;  		
 		initItems(); 
 
 		
