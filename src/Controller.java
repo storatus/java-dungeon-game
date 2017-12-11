@@ -3,8 +3,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.Random;
+import java.util.TimerTask;
 
 import javax.swing.Timer;
 
@@ -18,7 +29,6 @@ public class Controller implements ActionListener, KeyListener {
 
 	private boolean isBotX = false;
 	
-	
 	public Controller(Model model, View view) {
 
 		this.model = model;
@@ -27,8 +37,12 @@ public class Controller implements ActionListener, KeyListener {
 
 		collideBots(3);
 		moveBots(3);
+		
+
+		
 
 	}
+	
 
 	public void doMovement(int key) {
 
@@ -38,7 +52,13 @@ public class Controller implements ActionListener, KeyListener {
 		
 		if (model.getMoveState() == false) {
 			model.setMoveState(true);
-			model.setDoorNotification(false);  
+			model.setDoorNotification(false);
+			
+			//Here I set the timer 
+			if(model.getTimer() == 50) {
+				model.setTimer(); 
+			}
+			
 		}
 
 		if (key == KeyEvent.VK_DOWN) {
@@ -60,11 +80,44 @@ public class Controller implements ActionListener, KeyListener {
 		}
 
 	}
+	
+	public void doGameWonMovement(KeyEvent e){
+		char character = e.getKeyChar();
+		int keyCode = e.getKeyCode();
+		model.buildName(character,keyCode);
+		
+		// set the properties value
+		String name = model.getName().toString(); 
+		String time = String.valueOf(model.getTimer()); 
+		
+		
+		// To enter the name
+		if(keyCode == 10 && model.getName().length() > 0) {
+			
+			try(PrintWriter output = new PrintWriter(new FileWriter("scores.txt",true))) 
+			{				    
+			
+				String newLine = name+","+time;
+			    output.printf("%s\r\n", newLine);
+			    
+			    
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		    System.exit(0);
+			
+
+		}
+		
+	}
+	
+	
+	
 
 	public void doMenuMovement(int key) {
 
 		//Determine if dead or in main Menu
-		int decreaseLimit = 3; 
+		int decreaseLimit = 4; 
 		if(model.getDeadState()) {
 			decreaseLimit = 2;
 		}
@@ -79,20 +132,33 @@ public class Controller implements ActionListener, KeyListener {
 		}
 
 		if (key == 10) {
+			if(model.getScoreMenu()) {
+				model.setScoreMenu(false);
+				return; 
+			}
 			selectMenu(model.getMenuState());
 		}
 	}
 
-	public void selectMenu(int state) {
+	public void selectMenu(int state){
 		
 		if(!model.getDeadState()) {
+			
 			if (state == 1) {
 				model.setGameState(true);
 			}
 
+			
 			if (state == 3) {
+
+				model.setScoreMenu(true); 
+			
+			}
+			
+			if (state == 4) {
 				System.exit(0);
 			}
+		
 		}else {
 			if (state == 1) {
 				renewGame();
@@ -144,31 +210,6 @@ public class Controller implements ActionListener, KeyListener {
 
 	}
 
-	public void frameBounce() {
-
-		int bounceWidth = model.getDimensionWidth() - model.getIconSize();
-		int bounceHeight = model.getDimensionHeight() - model.getIconSize();
-
-		if (model.getHeroX() > bounceWidth) {
-			model.setGoX(0);
-			model.setHeroX(bounceWidth);
-		}
-
-		if (model.getHeroY() > bounceHeight) {
-			model.setGoY(0);
-			model.setHeroY(bounceHeight);
-		}
-
-		if (model.getHeroX() < 0) {
-			model.setGoX(0);
-			model.setHeroX(0);
-		}
-
-		if (model.getHeroY() < 0) {
-			model.setGoY(0);
-			model.setHeroY(0);
-		}
-	}
 	
 	public void openDoors(){
 		
@@ -220,15 +261,22 @@ public class Controller implements ActionListener, KeyListener {
 				
 				if(state == 3) {
 					
+					// Here is where i change levels 
+					
+					//Notification that i changed levels
+					
+					if(model.getCurrentLevel() == 4) {
+						model.setGameWon(true);
+						model.stopTimer();
+						model.doGameOver(); 
+						break; 
+					}
 					
 					
 					int nextLevel = model.getCurrentLevel()+1;
 					model.setCurrentLevel(nextLevel);
 					model.initItems();
-					
-					
-					
-					
+			
 					break; 
 				}
 				
@@ -342,9 +390,19 @@ public class Controller implements ActionListener, KeyListener {
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
 
-		if(model.getGameState() && !model.getDeadState()){
+		
+		
+		if(model.getGameState() && !model.getDeadState() && !model.getGameWon()){
 			doMovement(key);
 		}else {
+			
+			if(model.getGameWon()) {
+				doGameWonMovement(e); 
+				return; 
+			}
+			
+		
+			
 			doMenuMovement(key);
 		}
 
@@ -364,7 +422,6 @@ public class Controller implements ActionListener, KeyListener {
 
 		if (model.getGameState()) {
 			model.setPlayer(new Rectangle(model.getHeroX(), model.getHeroY(), 40, 40));
-			frameBounce();
 			hitCoin();
 			hitBot();
 			hitDoor();

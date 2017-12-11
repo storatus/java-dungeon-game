@@ -3,8 +3,11 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.swing.ImageIcon;
+import javax.swing.JTextArea;
 
 public class Model extends PlayerModel{
 	
@@ -25,31 +28,39 @@ public class Model extends PlayerModel{
 	 private ArrayList<Rectangle> tiles = new ArrayList<Rectangle>();
 
 	// Other
-	Font gameFont = new Font("Arial", Font.BOLD,30);	
+	Font gameFont = new Font("Arial", Font.BOLD,20);	
 	private boolean deadState = false;
 	private boolean gameState = false;
 	private boolean isPositioned = false;
 	private boolean moveState = false;
-	
 	private boolean doorState = false;
+	
+	private boolean gameWon = false;
+	
+	private boolean seeScoreMenu = false; 
 	
 	private int botNumber = 2; 
 	private int coinNumber = 12; 
-
+	private int time = 50; 
 	
 	
 	private int currentLevel = 1;  
 	
 	
 	private int menuState = 1; 
-	private int[] menuStates = {400,500,600};
+	private int[] menuStates = {400,500,600,700};
 	private int[] menuDeadStates = {270,330};
 
+	private String[] roomNames = {"Entrance","Kitchen","Sewer","Snake Pit"};
+    Timer countdownTimer = new Timer();
+
+	StringBuilder word = new StringBuilder();
+    
+    
 	
 	// 1 - Wall
 	// 2 - Closed Door
 	// 3 - Opened Door
-	// 4 - Startway
 		
 	
 	private int[][] dungeon = {
@@ -106,6 +117,51 @@ public class Model extends PlayerModel{
 	};
 	
 	
+	public void setCountDown(int number) {
+		this.time = number; 
+	}
+	
+	public StringBuilder getName(){
+		return word; 
+	}
+	
+	public void buildName(char character, int code){
+		int length = this.getName().length(); 
+
+		if(code == 8) {
+			if(length > 0) {
+				this.getName().deleteCharAt(length-1);
+			}
+			return;  	 
+		}
+		
+		if(length >= 3) {
+			return; 
+		}
+		
+		if(Character.isLetter(character)){
+			word.append(character);
+		}
+	}
+	
+	
+	public void setScoreMenu(boolean state) {
+		this.seeScoreMenu = state; 
+	}
+	
+	public boolean getScoreMenu() {
+		return seeScoreMenu;  
+	}
+	
+	public void setGameWon(boolean state){
+		this.gameWon = state; 
+	}
+	
+	public boolean getGameWon(){
+		return gameWon; 
+	}
+	
+	
 	public int getIconSize() {
 		return iconSize; 
 	}
@@ -157,9 +213,7 @@ public class Model extends PlayerModel{
 		if(currentLevel == 4) {
 			return dungeon4; 
 		}
-		
-//		System.out.println(currentLevel); 
-		
+				
 		//Default
 		return dungeon; 	
 		 
@@ -245,8 +299,17 @@ public class Model extends PlayerModel{
 		}
 	}
 	
+	public ArrayList<Rectangle> getTiles() {
+		return tiles; 
+	}
 	
+	public String getRoomName() {				
+		return roomNames[currentLevel-1];
+	}
 	
+	public int getTimer() {
+		return time; 
+	}
 	
 	public void generateItems(List<int[]> itemList, int count, String name) {
 		
@@ -303,6 +366,13 @@ public class Model extends PlayerModel{
 	public void doDead() {
 		setMoveState(false); 
 		setDeadState(true);
+	}
+	
+	public void doGameOver() {
+		
+		setMoveState(false); 
+
+		
 	}
 	
 	public void positionPlayer() {
@@ -395,9 +465,26 @@ public class Model extends PlayerModel{
 		}
 	}
 	
-	public ArrayList<Rectangle> getTiles() {
-		return tiles; 
+	
+	public void setTimer() {
+		//source: goo.gl/9Txdbr
+		countdownTimer.schedule(new TimerTask() {
+            public void run() {
+                time--; 
+                if (time == 0) {
+                		System.exit(0); 
+                		countdownTimer.cancel();
+                }
+                    
+            }
+        }, 0, 1000);
+        
 	}
+	
+	public void stopTimer() {		
+		countdownTimer.cancel();
+	}
+
 	
 	public void initItems() {
 		generateCollisions();
@@ -415,8 +502,10 @@ public class Model extends PlayerModel{
 		super(); 
 		//Set tile size
 		this.tileSize = dWidth/dungeon.length;  		
-		initItems(); 
+		initItems();
 
+
+	
 		
 	}
 	
