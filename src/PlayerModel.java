@@ -1,52 +1,50 @@
 import java.awt.Rectangle;
 
 public class PlayerModel {
-	
+
 	// Hero position
 	private int heroX = 300, heroY = 300, goY = 0, goX = 0;
-    private Rectangle playerPosition; 
-     
-	
-	//** Hero and Go
+	private Rectangle playerPosition;
+
+	// ** Hero and Go
 	public int getHeroX() {
-		return this.heroX; 
+		return this.heroX;
 	}
-	
+
 	public void setHeroX(int number) {
-		this.heroX = number; 
+		this.heroX = number;
 	}
-	
+
 	public int getHeroY() {
-		return heroY; 
+		return heroY;
 	}
-	
+
 	public void setHeroY(int number) {
-		this.heroY = number; 
+		this.heroY = number;
 	}
-	
+
 	public int getGoX() {
-		return goX; 
+		return goX;
 	}
-	
+
 	public void setGoX(int number) {
-		this.goX = number; 
+		this.goX = number;
 	}
-	
+
 	public int getGoY() {
-		return goY; 
+		return goY;
 	}
-	
+
 	public void setGoY(int number) {
-		this.goY = number; 
+		this.goY = number;
 	}
-	
-	
+
 	public void setPlayer(Rectangle rectangle) {
-		 this.playerPosition = rectangle; 
+		this.playerPosition = rectangle;
 	}
-	
+
 	public Rectangle getPlayer() {
-		 return playerPosition; 
+		return playerPosition;
 	}
 
 }

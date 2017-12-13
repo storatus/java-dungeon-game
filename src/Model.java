@@ -7,8 +7,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.swing.ImageIcon;
-import javax.swing.JTextArea;
-
+ 
 public class Model extends PlayerModel{
 	
 	private int iconSize = 40;
@@ -38,6 +37,8 @@ public class Model extends PlayerModel{
 	private boolean gameWon = false;
 	
 	private boolean seeScoreMenu = false; 
+	private boolean seeInstructionsMenu = false; 
+	
 	
 	private int botNumber = 2; 
 	private int coinNumber = 12; 
@@ -116,6 +117,14 @@ public class Model extends PlayerModel{
 			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },			
 	};
 	
+	
+	public void setInstructionsMenu(boolean state) {
+		seeInstructionsMenu = state; 
+	}
+	
+	public boolean getInstructionsMenu() {
+		return seeInstructionsMenu; 
+	}
 	
 	public void setCountDown(int number) {
 		this.time = number; 

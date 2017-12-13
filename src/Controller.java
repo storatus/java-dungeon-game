@@ -3,19 +3,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 import java.util.Random;
-import java.util.TimerTask;
 
 import javax.swing.Timer;
 
@@ -132,10 +124,18 @@ public class Controller implements ActionListener, KeyListener {
 		}
 
 		if (key == 10) {
+			
 			if(model.getScoreMenu()) {
 				model.setScoreMenu(false);
 				return; 
 			}
+			
+			if(model.getInstructionsMenu()) {
+				model.setInstructionsMenu(false);
+				return; 
+			}
+						
+			
 			selectMenu(model.getMenuState());
 		}
 	}
@@ -147,12 +147,14 @@ public class Controller implements ActionListener, KeyListener {
 			if (state == 1) {
 				model.setGameState(true);
 			}
+			
+			if (state == 2) {
+				model.setInstructionsMenu(true);
+			}
 
 			
 			if (state == 3) {
-
 				model.setScoreMenu(true); 
-			
 			}
 			
 			if (state == 4) {
