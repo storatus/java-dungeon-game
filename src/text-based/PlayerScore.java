@@ -3,6 +3,7 @@
  * Multi-Player Adventure Game SWEngCW02
  *
  * @version 1.0
+ @ gitCommit 1.1
  * @release 12/11/2017 Addressing Function Requirement FR2b, FR2hii,
  *    User Story US004
  * @See PlayerScoreTest.java
