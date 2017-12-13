@@ -10,6 +10,7 @@ import static org.junit.Assert.*;
  * and showGoldScore() methods
  *
  * @version 1.0
+ * @gitCommit 1.3
  * @release 12/11/2017 Addressing Function Requirement FR2b, FR2hii, User Story
  *          US004
  * @See PlayerScore.java
