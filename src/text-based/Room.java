@@ -5,6 +5,7 @@
  *
  * @version 2.0
  * @created 14/11/2017
+ * @gitCommit 1.6
  * @release 17/11/2017 Addressing Function Requirement
  * FR2a, FR2b, User Story US001
  * @See PlayerScore.java, Player.java, PlayerTest.java
