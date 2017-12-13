@@ -5,6 +5,7 @@
  *
  * @version 2.0
  * @created 27/11/2017
+ * @gitCommit 1.7
  * @release 1/12/2017 Addressing  Functional
  *      Requirement FR1b, FR2g, User Story US0017,
  *      SD07
