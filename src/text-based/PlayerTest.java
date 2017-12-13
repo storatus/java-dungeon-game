@@ -6,6 +6,7 @@
  * moveUp() and moveDown() methods
  *
  * @version 1.0
+ * @gitCommit 1.5
  * @release 21/11/2017 Addressing  Functional
  *      Requirement FR1a, FR2f, User Story US005,
  *      US006, US007
