@@ -244,8 +244,9 @@ public class View extends JPanel {
 
 		int menuState = model.getMenuState();
 		int tokenState = model.getMenuStates()[menuState - 1];
+		Color darkBlue = new Color(34, 28, 53);
 
-		setBackground(Color.black);
+		setBackground(darkBlue);
 
 		g2d.drawImage(model.getImage("hero"), 200, tokenState, this);
 		g2d.drawImage(model.getImage("menu-main"), 200, 100, this);
