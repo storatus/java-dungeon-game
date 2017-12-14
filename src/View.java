@@ -33,7 +33,7 @@ public class View extends JPanel {
 				g2d.drawImage(model.getImage("hero"), model.getHeroX(), model.getHeroY(), this);
 
 				if (!model.getMoveState()) {
-					showConditionScreen(g2d, "You have to collect 10 coins", "Move to continue");
+					showConditionScreen(g2d, "You have to collect 3 coins", "Move to continue");
 				}
 
 				if (model.getDoorNotification()) {
