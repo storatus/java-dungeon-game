@@ -37,7 +37,7 @@ public class View extends JPanel {
 				}
 
 				if (model.getDoorNotification()) {
-					showConditionScreen(g2d, "You have to collect more than 10 coins", "To open this door");
+					showConditionScreen(g2d, "You have to collect more than 3 coins", "To open this door");
 				}
 
 				if (model.getGameWon()) {
@@ -90,7 +90,7 @@ public class View extends JPanel {
 	}
 
 	public void showGameWonScreen(Graphics2D g2d) {
-		
+
 		// Draw Canvas
 		g2d.setColor(Color.white);
 		g2d.fillRect(100, 200, 600, 300);
