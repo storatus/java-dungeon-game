@@ -1,11 +1,10 @@
-<a href="http://www.sebastianglahn.com"><img src="http://www.sebastianglahn.com/images/portfolio/portfolio_education/github/education-github-1.png" alt=""></a>
+<a href="http://www.sebastianglahn.com"><img src="sample-images/sample-1" alt=""></a>
 
 
 
 # Java Dungeon Game
 
 As part of an MSc Project, I have built a dungeon game which serves very good for a game template for future projects.  
-
 
 
 ### Installation
