@@ -1,4 +1,4 @@
-<a href="http://www.sebastianglahn.com"><img src="sample-images/sample-1.png" alt=""></a>
+<a href="http://www.sebastianglahn.com"><img src="sample-images/sample-1.png" height="300"></a>
 
 
 
