@@ -1,15 +1,3 @@
-/**
- * Class. PlayerModel for
- * Multi-Player Adventure Game SWEngCW02
- *
- * @version 1.0
- * @created 15/11/2017
- * @gitCommit 1.12
- * @release 14/12/2017 Addressing  Functional
- *      Requirement for User stories SD01-SD17
- *
- */
-
 import java.awt.Rectangle;
 
 // This model class is an extension of Model

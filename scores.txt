@@ -10,3 +10,6 @@ fze,31
 bbb,28
 ggg,19
 fff,38
+seb,19
+seb,13
+bhb,2

@@ -1,15 +1,3 @@
-/**
- * Class. Controller for
- * Multi-Player Adventure Game SWEngCW02
- *
- * @version 1.0
- * @created 15/11/2017
- * @gitCommit 1.12
- * @release 14/12/2017 Addressing  Functional
- *      Requirement for User stories SD01-SD17
- *
- */
-
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,36 +14,36 @@ public class Controller implements ActionListener, KeyListener {
 
 	// The timer for setting the movement algorithm
 	Timer timer = new Timer(1, this);
-	
-	// model and view 
+
+	// model and view
 	private Model model;
 	private View view;
 
 	// For changing positions
 	private boolean isBotX = false;
 
-	// Constructor for initiating the model and the view 
+	// Constructor for initiating the model and the view
 	public Controller(Model model, View view) {
 
 		this.model = model;
 		this.view = view;
 		timer.start();
-		
+
 		// 3 as a time constraints for how bots collide and move
 		collideBots(3);
 		moveBots(3);
 
 	}
 
-	// Do movement within the game 
+	// Do movement within the game
 	public void doMovement(int key) {
-		
-		// If i am dead, I cannot move 
+
+		// If i am dead, I cannot move
 		if (model.getDeadState()) {
 			return;
 		}
 
-		// When the game starts and I move for the first time the entry notification gets away 
+		// When the game starts and I move for the first time the entry notification gets away
 		if (model.getMoveState() == false) {
 			model.setMoveState(true);
 			model.setDoorNotification(false);
@@ -69,7 +57,7 @@ public class Controller implements ActionListener, KeyListener {
 
 		// setGo is bound with the timer.
 		// If it is 0 the player wont move to x or y
-		// If 1, the player will move accordingly 
+		// If 1, the player will move accordingly
 		if (key == KeyEvent.VK_DOWN) {
 			model.setGoX(0);
 			model.setGoY(1);
@@ -79,12 +67,12 @@ public class Controller implements ActionListener, KeyListener {
 			model.setGoX(0);
 			model.setGoY(-1);
 		}
-		
+
 		if (key == KeyEvent.VK_LEFT) {
 			model.setGoX(-1);
 			model.setGoY(0);
 		}
-		
+
 		if (key == KeyEvent.VK_RIGHT) {
 			model.setGoX(1);
 			model.setGoY(0);
@@ -95,17 +83,17 @@ public class Controller implements ActionListener, KeyListener {
 	// Do movement and writing once I won the game
 	// This mainly indicates how to write the name
 	public void doGameWonMovement(KeyEvent e) {
-		
+
 		// I I build the name within the Swing library
 		char character = e.getKeyChar();
 		int keyCode = e.getKeyCode();
 		model.buildName(character, keyCode);
 
-		// Show the time and written name in Swing 
+		// Show the time and written name in Swing
 		String name = model.getName().toString();
 		String time = String.valueOf(model.getTimer());
 
-		// If the name is entered, play enter and it is stored in the scores.txt 
+		// If the name is entered, play enter and it is stored in the scores.txt
 		if (keyCode == 10 && model.getName().length() > 0) {
 
 			try (PrintWriter output = new PrintWriter(new FileWriter("scores.txt", true))) {
@@ -140,7 +128,7 @@ public class Controller implements ActionListener, KeyListener {
 			model.plusMenuState();
 		}
 
-		// 10 is "enter" as keyCode 
+		// 10 is "enter" as keyCode
 		if (key == 10) {
 
 			if (model.getScoreMenu()) {
@@ -161,8 +149,8 @@ public class Controller implements ActionListener, KeyListener {
 	public void selectMenu(int state) {
 
 		// If not dead be in main menu
-		// Else select in death menu 
-		
+		// Else select in death menu
+
 		if (!model.getDeadState()) {
 
 			if (state == 1) {
@@ -233,8 +221,8 @@ public class Controller implements ActionListener, KeyListener {
 		}
 
 	}
-	
-	// If the player has hit enough coins. the doors will open 
+
+	// If the player has hit enough coins. the doors will open
 	public void openDoors() {
 
 		for (Rectangle rectangle : model.getTiles()) {
@@ -247,7 +235,7 @@ public class Controller implements ActionListener, KeyListener {
 			int row = xCoor / tile;
 
 			// The state can be 1,2,3 (Wall,Door, opened door)
-			
+
 			int state = model.getDungeon()[col][row];
 
 			// We are looking for state 2 because this represents the door
@@ -284,7 +272,7 @@ public class Controller implements ActionListener, KeyListener {
 					model.setMoveState(false);
 				}
 
-				// If state is 3 (opened door) switch the level 
+				// If state is 3 (opened door) switch the level
 				if (state == 3) {
 					// Here is where i change levels
 					// Notification that i changed levels
@@ -343,10 +331,10 @@ public class Controller implements ActionListener, KeyListener {
 		}
 	}
 
-	// Move the Bots 
+	// Move the Bots
 	public void moveBots(int time) {
 
-		// Set the timer which has the same functionality as moving the hero 
+		// Set the timer which has the same functionality as moving the hero
 		// ActrionPerformed is repetitive due to the timer
 		// Every time 3 nanoseconds actionePerformed is repeated so the moving of the bots and the hero is smooth
 		Timer timer = new Timer(time, new ActionListener() {
@@ -420,18 +408,18 @@ public class Controller implements ActionListener, KeyListener {
 	public void keyPressed(KeyEvent e) {
 
 		int key = e.getKeyCode();
-		
-		// If game is won or dead, do movement 
+
+		// If game is won or dead, do movement
 		if (model.getGameState() && !model.getDeadState() && !model.getGameWon()) {
 			doMovement(key);
 		} else {
-			
-			// if the game is won 
+
+			// if the game is won
 			if (model.getGameWon()) {
 				doGameWonMovement(e);
 				return;
 			}
-			
+
 			// In main menu
 			doMenuMovement(key);
 		}
@@ -445,7 +433,7 @@ public class Controller implements ActionListener, KeyListener {
 		model.setGoY(0);
 	}
 
-	
+
 	@Override
 	public void keyTyped(KeyEvent e) {}
 
@@ -455,7 +443,7 @@ public class Controller implements ActionListener, KeyListener {
 
 		// gameState is if you are in the game or not
 		if (model.getGameState()) {
-			// If you are in the game do all detections 
+			// If you are in the game do all detections
 			model.setPlayer(new Rectangle(model.getHeroX(), model.getHeroY(), 40, 40));
 			hitCoin();
 			hitBot();

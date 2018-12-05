@@ -1,14 +1,3 @@
-/**
- * Class. Model for
- * Multi-Player Adventure Game SWEngCW02
- *
- * @version 1.0
- * @created 15/11/2017
- * @gitCommit 1.12
- * @release 14/12/2017 Addressing  Functional
- *      Requirement for User stories SD01-SD17
- *
- */
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -21,13 +10,13 @@ import javax.swing.ImageIcon;
 
 public class Model extends PlayerModel {
 
-	
-	// Frame, Font and iconsize 
+
+	// Frame, Font and iconsize
 	private int dHeight = 800;
 	private int dWidth = 800;
 	private int iconSize = 40;
 	Font gameFont = new Font("Arial", Font.BOLD, 20);
-	
+
 	// The size of the tile
 	private int tileSize;
 
@@ -64,7 +53,7 @@ public class Model extends PlayerModel {
 
 	// Showing the Room names in the levels accordingly
 	private String[] roomNames = { "Entrance", "Kitchen", "Sewer", "Snake Pit" };
-	
+
 	// The time for placing the countdown within the game
 	Timer countdownTimer = new Timer();
 
@@ -76,60 +65,60 @@ public class Model extends PlayerModel {
 	// 2 - Closed Door
 	// 3 - Opened Door
 
-	private int[][] dungeon = { 
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 
+	private int[][] dungeon = {
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
-			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 }, 
-			{ 2, 0, 0, 0, 0, 0, 0, 1, 1, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
 			{ 2, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
-			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 }, 
-			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 }, 
+			{ 2, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
 			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
-			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 }, 
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
+			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
+			{ 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 			};
 
-	private int[][] dungeon2 = { 
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 
+	private int[][] dungeon2 = {
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 1, 1 },
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 1, 1 }, 
-			{ 1, 0, 0, 1, 1, 0, 0, 0, 1, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 1, 1 },
 			{ 1, 0, 0, 1, 1, 0, 0, 0, 1, 1 },
-			{ 1, 0, 0, 1, 1, 0, 0, 0, 1, 1 }, 
-			{ 1, 0, 0, 1, 1, 0, 0, 0, 2, 1 }, 
+			{ 1, 0, 0, 1, 1, 0, 0, 0, 1, 1 },
+			{ 1, 0, 0, 1, 1, 0, 0, 0, 1, 1 },
+			{ 1, 0, 0, 1, 1, 0, 0, 0, 2, 1 },
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 2, 1 },
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 1, 1 }, 
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 1, 1 },
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 			};
 
-	private int[][] dungeon3 = { 
-			{ 1, 1, 1, 2, 2, 2, 2, 1, 1, 1 }, 
+	private int[][] dungeon3 = {
+			{ 1, 1, 1, 2, 2, 2, 2, 1, 1, 1 },
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 }, 
-			{ 1, 0, 0, 1, 1, 0, 1, 1, 0, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
 			{ 1, 0, 0, 1, 1, 0, 1, 1, 0, 1 },
-			{ 1, 0, 0, 1, 1, 0, 1, 1, 0, 1 }, 
-			{ 1, 0, 0, 1, 1, 0, 1, 1, 0, 1 }, 
+			{ 1, 0, 0, 1, 1, 0, 1, 1, 0, 1 },
+			{ 1, 0, 0, 1, 1, 0, 1, 1, 0, 1 },
+			{ 1, 0, 0, 1, 1, 0, 1, 1, 0, 1 },
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 }, 
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 			};
 
-	private int[][] dungeon4 = { 
-			{ 1, 1, 1, 2, 2, 2, 2, 1, 1, 1 }, 
+	private int[][] dungeon4 = {
+			{ 1, 1, 1, 2, 2, 2, 2, 1, 1, 1 },
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-			{ 1, 0, 0, 1, 1, 1, 1, 1, 0, 1 }, 
-			{ 1, 0, 0, 1, 1, 1, 1, 1, 0, 1 }, 
+			{ 1, 0, 0, 1, 1, 1, 1, 1, 0, 1 },
+			{ 1, 0, 0, 1, 1, 1, 1, 1, 0, 1 },
 			{ 1, 0, 0, 1, 1, 0, 1, 1, 0, 1 },
-			{ 1, 0, 0, 1, 1, 0, 1, 1, 0, 1 }, 
-			{ 1, 0, 0, 1, 1, 0, 1, 1, 0, 1 }, 
+			{ 1, 0, 0, 1, 1, 0, 1, 1, 0, 1 },
+			{ 1, 0, 0, 1, 1, 0, 1, 1, 0, 1 },
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 }, 
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 			};
 
 	//Getters and setters for manipulating the data from the controller
-	
+
 	public void setInstructionsMenu(boolean state) {
 		seeInstructionsMenu = state;
 	}
@@ -146,7 +135,7 @@ public class Model extends PlayerModel {
 		return word;
 	}
 
-	// Build the name when the player has won the game 
+	// Build the name when the player has won the game
 	public void buildName(char character, int code) {
 		int length = this.getName().length();
 
@@ -324,7 +313,7 @@ public class Model extends PlayerModel {
 	public int getTimer() {
 		return time;
 	}
-	
+
 	List<int[]> getCoinList() {
 		return coinList;
 	}
@@ -347,7 +336,7 @@ public class Model extends PlayerModel {
 			boolean intersects = false;
 
 			// Loop through all the rectangles that were stored in the tiles array
-			// The tiles array contains only tiles that are restricted such as walls and doors   
+			// The tiles array contains only tiles that are restricted such as walls and doors
 			// if an intersection was found out the intersects flag is set to true
 			for (Rectangle rectangle : tiles) {
 				if (rectangle.intersects(itemRectangle)) {
@@ -360,10 +349,10 @@ public class Model extends PlayerModel {
 			if (intersects) {
 				generateItems(itemList, count, name);
 			} else {
-				
+
 				if (name == "bots") {
-				
-					// randomNumber will be used for generating the image later 
+
+					// randomNumber will be used for generating the image later
 					int randomNumber = ThreadLocalRandom.current().nextInt(1, 4 + 1);
 					itemList.add(new int[] { randomX, randomY, 1, 1, randomNumber });
 				}
@@ -393,17 +382,17 @@ public class Model extends PlayerModel {
 
 	// I am dead - do things
 	public void doDead() {
-	
+
 		setMoveState(false);
 		setDeadState(true);
-	
+
 	}
 
 	// Set move state to false when die
 	public void doGameOver() {
-		
+
 		setMoveState(false);
-	
+
 	}
 
 	// Position the player and when it intersects with a restricted tile (doors, walls)
@@ -437,7 +426,7 @@ public class Model extends PlayerModel {
 
 	}
 
-	// Prepare Image to provide to the controller 
+	// Prepare Image to provide to the controller
 	public Image getImage(String name) {
 		ImageIcon imageObj = new ImageIcon("images/" + name + ".png");
 		Image image = imageObj.getImage();
@@ -485,7 +474,7 @@ public class Model extends PlayerModel {
 		}
 	}
 
-	// Set the timer for inside the  
+	// Set the timer for inside the
 	public void setTimer() {
 		// source: goo.gl/9Txdbr
 		countdownTimer.schedule(new TimerTask() {
@@ -500,7 +489,7 @@ public class Model extends PlayerModel {
 		}, 0, 1000);
 
 	}
-	
+
 	//Stop the timer once you won the game
 	public void stopTimer() {
 		countdownTimer.cancel();

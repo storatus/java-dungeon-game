@@ -1,15 +1,3 @@
-/**
- * Class. View for
- * Multi-Player Adventure Game SWEngCW02
- *
- * @version 1.0
- * @created 15/11/2017
- * @gitCommit 1.12
- * @release 14/12/2017 Addressing  Functional
- *      Requirement for User stories SD01-SD17
- *
- */
-
 import javax.swing.*;
 import java.util.List;
 import java.awt.BasicStroke;
@@ -26,12 +14,12 @@ import java.io.IOException;
 
 public class View extends JPanel {
 
-	// Instantiating controller from view 
+	// Instantiating controller from view
 	private Controller controller;
 	private Model model;
 
-	
-	// paintComponent is an awt/swing method which is the heart of the game  
+
+	// paintComponent is an awt/swing method which is the heart of the game
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
@@ -68,7 +56,7 @@ public class View extends JPanel {
 		} else {
 
 			// Show main Menu if not the other menus are selected
-			
+
 			if (model.getScoreMenu()) {
 				showScoreScreen(g2d);
 				return;
@@ -124,7 +112,7 @@ public class View extends JPanel {
 		g2d.drawString("Name: " + model.getName(), 150, 400);
 
 	}
-	
+
 	// This method shows when hero starts the game or hits the game
 	public void showConditionScreen(Graphics2D g2d, String s, String s2) {
 
@@ -141,10 +129,10 @@ public class View extends JPanel {
 		g2d.drawString(s2, 250, 270);
 
 	}
-	
+
 	// Show score screen inside menu
 	public void showScoreScreen(Graphics2D g2d) {
-		
+
 		// Draw String
 		g2d.setFont(new Font("SansSerif", Font.BOLD, 25));
 		g2d.setColor(Color.white);
@@ -157,7 +145,7 @@ public class View extends JPanel {
 
 		try {
 			fileInput = new BufferedReader(new FileReader("scores.txt"));
-			
+
 			String line = null;
 			int scoreCounter = 1;
 			int newLineCounter = 150;
@@ -188,7 +176,7 @@ public class View extends JPanel {
 
 	public void showInstructionsScreen(Graphics2D g2d) {
 
-		// Draw String 
+		// Draw String
 		g2d.setFont(new Font("SansSerif", Font.BOLD, 25));
 		g2d.setColor(Color.white);
 		g2d.drawString("Press enter to go back.", 200, 50);
@@ -198,8 +186,8 @@ public class View extends JPanel {
 	}
 
 	public void drawBots(Graphics2D g2d) {
-		
-		//Draw the bots and get 
+
+		//Draw the bots and get
 		for (int i = 0; i < model.getBotList().size(); i++) {
 			int posX = model.getBotList().get(i)[0];
 			int posY = model.getBotList().get(i)[1];
@@ -210,8 +198,8 @@ public class View extends JPanel {
 			g2d.drawImage(icon, posX, posY, this);
 
 		}
-		
-		
+
+
 	}
 
 	public void drawDungeonInfo(Graphics2D g2d) {
@@ -230,15 +218,15 @@ public class View extends JPanel {
 	public void drawDungeon(Graphics2D g2d) {
 
 		int tile = model.getTileSize();
-		
+
 		//GameDungeon determines which level should  be painted
 		int[][] gameDungeon = model.getDungeon();
 
 		for (int row = 0; row < gameDungeon.length; row++) {
 			for (int col = 0; col < gameDungeon[0].length; col++) {
-				
+
 				Color tileColor;
-				
+
 				switch (gameDungeon[row][col]) {
 				case 1:
 					tileColor = new Color(34, 28, 53);
@@ -258,8 +246,8 @@ public class View extends JPanel {
 
 				g2d.setColor(tileColor);
 				g2d.fillRect(tile * col, tile * row, tile, tile);
-				
-				//Draw borders of tiles 
+
+				//Draw borders of tiles
 				g2d.setColor(Color.BLACK);
 				if (gameDungeon[row][col] != 1) {
 					g2d.drawRect(tile * col, tile * row, tile, tile);
@@ -272,14 +260,14 @@ public class View extends JPanel {
 
 	//Draw main menu
 	public void drawMenu(Graphics2D g2d) {
-		
+
 		int menuState = model.getMenuState();
 		int tokenState = model.getMenuStates()[menuState - 1];
 		Color darkBlue = new Color(34, 28, 53);
 		setBackground(darkBlue);
 
 		g2d.drawImage(model.getImage("hero"), 200, tokenState, this);
-		
+
 		g2d.drawImage(model.getImage("menu-main"), 200, 100, this);
 		g2d.drawImage(model.getImage("menu-play"), 300, 400, this);
 		g2d.drawImage(model.getImage("menu-instructions"), 300, 500, this);
@@ -287,7 +275,7 @@ public class View extends JPanel {
 		g2d.drawImage(model.getImage("menu-exit"), 300, 700, this);
 
 	}
-	
+
 	//Draw coins and bots
 	public void drawItems(List<int[]> list, Image icon, Graphics2D g2d) {
 
@@ -299,7 +287,7 @@ public class View extends JPanel {
 		}
 
 	}
-	
+
 	// Set the dimensions of the window at the beginning
 	public void setDimensions(int width, int height) {
 		setPreferredSize(new Dimension(width, height));
@@ -307,7 +295,7 @@ public class View extends JPanel {
 
 	public View() {
 
-		// Initiate model and controller 
+		// Initiate model and controller
 		Model model = new Model();
 		this.model = model;
 
